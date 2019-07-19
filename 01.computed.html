@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Computed</title>
+</head>
+<body>
+
+<div id="app">
+  <h2>{{fullName}}</h2>
+</div>
+
+<script src="../js/vue.js"></script>
+
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      firstName: 'Kobe',
+      lastName: 'Bryant'
+    },
+    computed: {
+      // fullName: function () {
+      //   return this.firstName + ' ' + this.lastName
+      // }
+      // name: 'coderwhy'
+      // 计算属性一般是没有set方法, 只读属性.
+      fullName: {
+        set: function(newValue) {
+          // console.log('-----', newValue); 如 Lerbon James
+          const names = newValue.split(' ');
+          this.firstName = names[0];
+          this.lastName = names[1];
+        },
+        get: function () {
+          return this.firstName + ' ' + this.lastName
+        }
+      },
+
+      // fullName: function () {
+      //   return this.firstName + ' ' + this.lastName
+      // }
+    }
+  })
+</script>
+
+</body>
+</html>
+
+在此例中，computed一般的写法是
+    fullName: function () {
+       return this.firstName + ' ' + this.lastName
+    }
+但是计算属性中有set(一般的计算属性没有set)和get,所以计算属性本来的写法如下所示:
+    fullName: {
+        get: function () {
+            return this.firstName + ' ' + this.lastName
+        }
+    }
+这样计算属性就只读了，要想给计算属性设置值，则需要加上set方法
+    1). 当给fullName设置值，如 app.fullName = 'Lerbon James',则就会调用set方法,
+    2). 但是得想办法把赋的值传入到set 方法之中，所以需要给set方法传入一个参数newValue
+    3). 这个时候把值传入到set中之后，需要保存起来.此例中，就如下保存:
+        fullName: {
+            set: function(newValue) {
+            // console.log('-----', newValue); 如 Lerbon James
+            const names = newValue.split(' ');
+            this.firstName = names[0];
+            this.lastName = names[1];
+            },
+            get: function () {
+            return this.firstName + ' ' + this.lastName
+            }
+        }
